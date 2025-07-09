@@ -2,7 +2,7 @@
   "name": "backend-project",
   "version": "1.0.0",
   "description": "",
-  "type": "commonjs",
+  "type": "module",
   "keywords": [
     "js",
     "backend"
@@ -12,10 +12,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.1.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.2"
   }
 }
