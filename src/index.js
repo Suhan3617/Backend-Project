@@ -2,8 +2,8 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import connectDB from "./db/index.js";
-
-dotenv.config({ path: "./env" });
+import { app } from "./app.js";
+dotenv.config({ path: "./.env" });
 
 connectDB()
   .then(() => {
@@ -14,6 +14,32 @@ connectDB()
   .catch((error) => {
     console.log("MONGODB connection failes!!! ERROR :", error);
   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 /*
 import express from "express"
 
