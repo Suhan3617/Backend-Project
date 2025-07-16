@@ -15,31 +15,6 @@ connectDB()
     console.log("MONGODB connection failes!!! ERROR :", error);
   });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
 /*
 import express from "express"
 
