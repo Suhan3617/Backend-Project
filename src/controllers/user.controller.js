@@ -7,6 +7,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
     const user = await User.findById(userId)
+
+    if(!user){
+      throw new ApiError(404 , "User doesnt exist")
+    }
     const accessToken = user.generateAccessToken()
     const refreshToken = user.generateRefreshToken()
 
@@ -16,9 +20,10 @@ const generateAccessAndRefreshTokens = async (userId) => {
     return {accessToken,refreshToken}
 
   } catch (error) {
+    console.error("Token generation error:", error); 
     throw new ApiError(
       500,
-      "Something wentcwrong while generating Access and Refresh Tokens"
+      "Something wentwrong while generating Access and Refresh Tokens"
     );
   }
 };
