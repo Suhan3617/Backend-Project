@@ -217,25 +217,24 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       incomingRefreshToken,
       process.env.REFRESH_TOKEN_SECRET
     );
-  
+
     const user = await User.findById(dedocedToken._id);
-  
+
     if (!user) {
       throw new ApiError(404, "Invalid Refresh Token");
     }
     if (incomingRefreshToken !== user.refreshToken) {
       throw new ApiError(401, "Refresh Token is expired or used");
     }
-  
+
     const options = {
       httpOnly: true,
       secure: true,
     };
-  
-    const { accessToken, newRefreshToken } = await generateAccessAndRefreshTokens(
-      user._id
-    );
-  
+
+    const { accessToken, newRefreshToken } =
+      await generateAccessAndRefreshTokens(user._id);
+
     return res
       .status(200)
       .cookie("accessToken", accessToken, options)
@@ -252,28 +251,39 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
-const changeCurrentPassword = asyncHandler(async (req,res)=> {
-  const {oldPassword , newPassword} = req.body
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
 
-  const user = await User.findById(req.user?.id)
+  const user = await User.findById(req.user?.id);
 
-  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
+  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
 
-  if(!isPasswordCorrect){
-    throw new ApiError(400, "Invalid Old Password !")
+  if (!isPasswordCorrect) {
+    throw new ApiError(400, "Invalid Old Password !");
   }
 
-  user.password=newPassword
-  await user.save({validateBeforeSave:false})
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
 
   return res
-  .status(200)
-  .json(new ApiResponse(200 , {} , "Password Changed Successfully !"))
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password Changed Successfully !"));
+});
+
+const getCurrentUser = asyncHandler(async (req, res) => {
+  return res.res(200).json(200, req.user, "Current User fetched Successfully");
+});
+
+const UpdateAccountDetails = asyncHandler(async(req,res)=>{
+  const {fullName , email} = req.body
 })
-export{
+
+export {
   registerUser,
   loginUser,
   logoutUser,
   refreshAccessToken,
-  generateAccessAndRefreshTokens
-}
+  generateAccessAndRefreshTokens,
+  changeCurrentPassword,
+  getCurrentUser,
+};
