@@ -291,6 +291,77 @@ const UpdateAccountDetails = asyncHandler(async(req,res)=>{
     },
     {new:true}
   ).select("-password")
+
+  return res
+  .status(200)
+  .json(new ApiResponse(200 , user , "Account details updated successfully"))
+});
+
+
+// files updation ke waqt two middlewares - multer for accepting files and check if user is logined !
+
+const updateUserAvatar = asyncHandler(async(req , res)=>{
+  
+  const avatarFilePath = req.file?.path
+
+  if(!avatarFilePath){
+     new ApiError(400 , "Avatar File is throwmissing !")
+  }
+
+  const avatar = await uploadOnCloudinary(avatarFilePath)
+
+  if(!avatar.url){
+    new ApiError(400 , "Error while uploading on avatar")
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+
+    {
+      $set:{
+        avatar:avatar.url
+      }
+    },
+    {new:true}
+  ).select("-password")
+
+  return res
+  .status(200)
+  .json(
+    new ApiResponse(200 , user , "Avatar updated Successfully !")
+  )
+})
+
+const updateUserCoverImage = asyncHandler(async(req , res)=>{
+
+  const coverImageFilePath = req.file?.path
+
+  if(!coverImageFilePath){
+     new ApiError(400 , "CoverImage File is throwmissing !")
+  }
+
+  const coverImage = await uploadOnCloudinary(coverImageFilePath)
+
+  if(!coverImage.url){
+    new ApiError(400 , "Error while uploading on CoverImage")
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+
+    {
+      $set:{
+        coverImage:coverImage.url
+      }
+    },
+    {new:true}
+  ).select("-password")
+
+  return res
+  .status(200)
+  .json(
+    new ApiResponse(200 , user , "CoverImage updated Successfully !")
+  )
 })
 
 export {
@@ -301,4 +372,7 @@ export {
   generateAccessAndRefreshTokens,
   changeCurrentPassword,
   getCurrentUser,
+  UpdateAccountDetails,
+  updateUserAvatar,
+  updateUserCoverImage
 };
