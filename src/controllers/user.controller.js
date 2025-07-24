@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary_service.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -430,6 +431,24 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
   )
   console.log(channel)
 });
+
+const getWatchedHistory = asyncHandler(async(req,res)=>{
+  // req.user._id --->>> isse humne mongoose mei se string milti h aur nah hi mongodb ki ID
+
+  const user = await User.aggregate([
+    {
+      $match:{
+        _id: new mongoose.Types.ObjectId(req.user._id)
+      }
+    },
+    {
+      $lookup:{
+        from:"videos",
+        localField:"wa"
+      }
+    }
+  ])
+})
 
 export {
   registerUser,
